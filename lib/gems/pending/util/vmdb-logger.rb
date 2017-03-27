@@ -143,7 +143,7 @@ class VMDBLogger < Logger
   end
 
   class Formatter < Logger::Formatter
-    FORMAT = "[----] %s, [%s#%d:%x] %5s -- %s: %s\n"
+    FORMAT = "%s [----] %s, [%s#%d:%x] %5s -- %s: %s\n"
 
     def call(severity, time, progname, msg)
       msg = msg2str(msg)
@@ -154,7 +154,7 @@ class VMDBLogger < Logger
         msg = "#{prefix} #{msg}" unless msg.include?(prefix)
       end
 
-      FORMAT % [severity[0..0], format_datetime(time), $$, Thread.current.object_id, severity, progname, msg]
+      FORMAT % [GC.stat.fetch(:total_allocated_objects), severity[0..0], format_datetime(time), $$, Thread.current.object_id, severity, progname, msg]
     end
   end
 end
